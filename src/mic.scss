@@ -1,0 +1,31 @@
+.wrap {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    input {
+        height: var(--input-height);
+        width: 100%;
+        line-height: var(--input-height);
+        border-radius: calc( var(--input-height) / 10 );
+        padding: calc( var(--input-height) / 4 );
+        font-size: calc( var(--input-height) * 0.6 );
+    }
+    .right-icon {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: calc( var(--input-height) / 4 );
+        height: var(--input-height);
+        cursor: pointer;
+
+        svg {
+            transform: scale(var(--icon-scale));
+        }
+        &:hover {
+            svg path {
+                fill: blue;
+            }
+        }
+    }
+}
