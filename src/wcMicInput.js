@@ -4,6 +4,7 @@ import '@webcomponents/custom-elements/custom-elements.min.js'
 
 import Recognizer from './speechRecognizer'
 import micStyle from './mic.scss'
+import soundImg from '../assets/sound'
 
 function getPixel (val) {
   const pixelVal = parseInt(val)
@@ -24,8 +25,8 @@ export default class MicInput extends HTMLElement {
     this.realInput = null
     this.value_ = '0'
     this.recognizer = new Recognizer({
-      onstart: () => {},
-      onstop: () => {},
+      onstart: () => { this.showAnimation.bind(this)() },
+      onstop: () => { this.hideAnimation.bind(this)() },
       onresult: (text) => {
         this.shadowRoot.getElementById('mic-input').value = String(text).replace('。', '')
       },
@@ -46,7 +47,7 @@ export default class MicInput extends HTMLElement {
     const styleElement = document.createElement('style')
     styleElement.appendChild(
       document.createTextNode(
-        `:host{--input-height: ${getPixel(_self.attributes.height?.value)}px;--icon-scale: ${getPixel(_self.attributes.height?.value) / 50};}`
+        `:host{--input-height: ${getPixel(_self.attributes.height?.value)}px;--icon-scale: ${getPixel(_self.attributes.height?.value) / 48};}`
       )
     )
     styleElement.appendChild(document.createTextNode(micStyle))
@@ -59,6 +60,24 @@ export default class MicInput extends HTMLElement {
 
   speech () {
     this.recognizer.speech()
+  }
+
+  showAnimation () {
+    const element = document.createElement('div')
+    element.id = 'sound-animation'
+    element.classList.add('sound-animation')
+    const spanElement = document.createElement('span')
+    spanElement.append(document.createTextNode('Listening...'))
+    element.appendChild(spanElement)
+    const imgElement = document.createElement('img')
+    imgElement.src = soundImg
+    element.appendChild(imgElement)
+    this.shadowRoot.querySelector('.wrap').appendChild(element)
+  }
+
+  hideAnimation () {
+    const element = this.shadowRoot.getElementById('sound-animation')
+    element.parentElement.removeChild(element)
   }
 
   disconnectedCallback () {
@@ -74,9 +93,11 @@ export default class MicInput extends HTMLElement {
   template () {
     return `
       <div class="wrap">
-        <input id="mic-input" type="text" />
-        <div id="mic-icon" class="right-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M24 26.85Q21.85 26.85 20.4 25.3Q18.95 23.75 18.95 21.55V9Q18.95 6.9 20.425 5.45Q21.9 4 24 4Q26.1 4 27.575 5.45Q29.05 6.9 29.05 9V21.55Q29.05 23.75 27.6 25.3Q26.15 26.85 24 26.85ZM24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45Q24 15.45 24 15.45ZM22.5 42V35.2Q17.2 34.65 13.6 30.75Q10 26.85 10 21.55H13Q13 26.1 16.225 29.2Q19.45 32.3 24 32.3Q28.55 32.3 31.775 29.2Q35 26.1 35 21.55H38Q38 26.85 34.4 30.75Q30.8 34.65 25.5 35.2V42ZM24 23.85Q24.9 23.85 25.475 23.175Q26.05 22.5 26.05 21.55V9Q26.05 8.15 25.45 7.575Q24.85 7 24 7Q23.15 7 22.55 7.575Q21.95 8.15 21.95 9V21.55Q21.95 22.5 22.525 23.175Q23.1 23.85 24 23.85Z"/></svg>
+        <div class="input-block">
+          <input id="mic-input" type="text" />
+          <div id="mic-icon" class="right-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+          </div>
         </div>
       </div>
     `
