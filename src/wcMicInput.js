@@ -29,8 +29,12 @@ export default class MicInput extends HTMLElement {
       onstop: () => { this.hideAnimation.bind(this)() },
       onresult: (text) => {
         this.shadowRoot.getElementById('mic-input').value = String(text).replace('。', '')
+        this.hideAnimation.bind(this)()
       },
-      onerror: (err) => { console.log(err) }
+      onerror: (err) => {
+        console.log(err)
+        this.hideAnimation.bind(this)()
+      }
     })
   }
 
@@ -77,7 +81,9 @@ export default class MicInput extends HTMLElement {
 
   hideAnimation () {
     const element = this.shadowRoot.getElementById('sound-animation')
-    element.parentElement.removeChild(element)
+    if (element) {
+      element.parentElement.removeChild(element)
+    }
   }
 
   disconnectedCallback () {

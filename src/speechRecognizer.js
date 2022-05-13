@@ -10,11 +10,16 @@ export default function Speech (callbackHandler) {
   let grantTimer = null
   let resultTimer = null
 
+  _self.isSpeeching = false
   _self.callbackHandler = callbackHandler
 
   const callError = function (msg) {
+    _self.recognition.stop()
     if (typeof this.callbackHandler?.onerror === 'function') {
-      this.callbackHandler.onerror('Speech recognition is not supported.')
+      if (_self.isSpeeching) {
+        this.callbackHandler.onerror(msg)
+        _self.isSpeeching = false
+      }
     }
   }.bind(_self)
 
@@ -24,15 +29,25 @@ export default function Speech (callbackHandler) {
     _self.recognition.lang = 'cmn-Hant-TW'
     _self.recognition.continuous = false
 
-    _self.recognition.onspeechstart = function () {
+    _self.recognition.onstart = function () {
       if (grantTimer !== null) {
         clearTimeout(grantTimeout)
       }
       resultTimer = setTimeout(() => {
-        callError('Speech timeout.')
+        callError('no-speech')
       }, defaultTimeout * 1000)
       if (typeof _self.callbackHandler?.onstart === 'function') {
         _self.callbackHandler.onstart()
+      }
+    }
+
+    _self.recognition.onend = function () {
+      _self.isSpeeching = false
+    }
+
+    _self.recognition.onspeechstart = function () {
+      if (resultTimer !== null) {
+        clearTimeout(resultTimer)
       }
     }
 
@@ -66,6 +81,7 @@ export default function Speech (callbackHandler) {
 
     _self.speech = function (cb, ecb, startcb, endcb) {
       try {
+        _self.isSpeeching = true
         _self.recognition.start()
       } catch (err) {
         callError(err.toString())
