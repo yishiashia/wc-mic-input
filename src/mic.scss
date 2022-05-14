@@ -9,6 +9,7 @@
             width: 100%;
             line-height: var(--input-height);
             border-radius: calc( var(--input-height) / 10 );
+            border-width: 1px;
             padding: calc( var(--input-height) / 4 );
             font-size: calc( var(--input-height) * 0.6 );
             box-sizing: border-box;
@@ -45,4 +46,43 @@
             display: inline-block;
         }
     }
+    #error-message {
+        &.fade-out {
+            -webkit-animation: fadeOut 10s linear forwards;
+            animation: fadeOut 10s linear forwards;
+        }
+        display: flex;
+        align-items: center;
+        &::before {
+            content: '';
+            -webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M22.65 26.35H25.65V13.7H22.65ZM24 34Q24.7 34 25.175 33.525Q25.65 33.05 25.65 32.35Q25.65 31.65 25.175 31.175Q24.7 30.7 24 30.7Q23.3 30.7 22.825 31.175Q22.35 31.65 22.35 32.35Q22.35 33.05 22.825 33.525Q23.3 34 24 34ZM24 44Q19.75 44 16.1 42.475Q12.45 40.95 9.75 38.25Q7.05 35.55 5.525 31.9Q4 28.25 4 24Q4 19.8 5.525 16.15Q7.05 12.5 9.75 9.8Q12.45 7.1 16.1 5.55Q19.75 4 24 4Q28.2 4 31.85 5.55Q35.5 7.1 38.2 9.8Q40.9 12.5 42.45 16.15Q44 19.8 44 24Q44 28.25 42.45 31.9Q40.9 35.55 38.2 38.25Q35.5 40.95 31.85 42.475Q28.2 44 24 44ZM24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24ZM24 41Q31 41 36 36Q41 31 41 24Q41 17 36 12Q31 7 24 7Q17 7 12 12Q7 17 7 24Q7 31 12 36Q17 41 24 41Z"/></svg>') no-repeat 0 0;
+            mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M22.65 26.35H25.65V13.7H22.65ZM24 34Q24.7 34 25.175 33.525Q25.65 33.05 25.65 32.35Q25.65 31.65 25.175 31.175Q24.7 30.7 24 30.7Q23.3 30.7 22.825 31.175Q22.35 31.65 22.35 32.35Q22.35 33.05 22.825 33.525Q23.3 34 24 34ZM24 44Q19.75 44 16.1 42.475Q12.45 40.95 9.75 38.25Q7.05 35.55 5.525 31.9Q4 28.25 4 24Q4 19.8 5.525 16.15Q7.05 12.5 9.75 9.8Q12.45 7.1 16.1 5.55Q19.75 4 24 4Q28.2 4 31.85 5.55Q35.5 7.1 38.2 9.8Q40.9 12.5 42.45 16.15Q44 19.8 44 24Q44 28.25 42.45 31.9Q40.9 35.55 38.2 38.25Q35.5 40.95 31.85 42.475Q28.2 44 24 44ZM24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24ZM24 41Q31 41 36 36Q41 31 41 24Q41 17 36 12Q31 7 24 7Q17 7 12 12Q7 17 7 24Q7 31 12 36Q17 41 24 41Z"/></svg>') no-repeat 0 0;
+            -webkit-mask-size: cover;
+            mask-size: cover;
+            height: 20px;
+            width: 20px;
+            background-color: red;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        span {
+            color: red;
+            padding-left: 5px;
+            flex-shrink: 1;
+        }
+    }
+}
+
+@keyframes fadeOut {
+    0%   {opacity: 1;}
+    70%  {opacity: 1;}
+    90% {opacity: 0.95;}
+    100% {opacity: 0;}
+}
+
+@-webkit-keyframes fadeOut {
+    0%   {opacity: 1;}
+    70%  {opacity: 1;}
+    90% {opacity: 0.95;}
+    100% {opacity: 0;}
 }

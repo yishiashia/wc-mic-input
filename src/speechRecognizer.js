@@ -1,3 +1,5 @@
+import speechError from './speechError'
+
 // throw error if not grant within 30 seconds
 const grantTimeout = 30
 // throw error if no result within 5 seconds
@@ -17,7 +19,11 @@ export default function Speech (callbackHandler) {
     _self.recognition.stop()
     if (typeof this.callbackHandler?.onerror === 'function') {
       if (_self.isSpeeching) {
-        this.callbackHandler.onerror(msg)
+        if (msg in speechError) {
+          this.callbackHandler.onerror(speechError[msg])
+        } else {
+          this.callbackHandler.onerror(msg)
+        }
         _self.isSpeeching = false
       }
     }
@@ -80,15 +86,17 @@ export default function Speech (callbackHandler) {
     }
 
     _self.speech = function (cb, ecb, startcb, endcb) {
-      try {
-        _self.isSpeeching = true
-        _self.recognition.start()
-      } catch (err) {
-        callError(err.toString())
+      if (!_self.isSpeeching) {
+        try {
+          _self.isSpeeching = true
+          _self.recognition.start()
+        } catch (err) {
+          callError(err.toString())
+        }
+        grantTimer = setTimeout(() => {
+          callError('Speech grant timeout.')
+        }, grantTimeout * 1000)
       }
-      grantTimer = setTimeout(() => {
-        callError('Speech grant timeout.')
-      }, grantTimeout * 1000)
     }
 
     _self.abort = function () {

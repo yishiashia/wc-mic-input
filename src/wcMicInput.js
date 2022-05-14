@@ -31,9 +31,10 @@ export default class MicInput extends HTMLElement {
         this.shadowRoot.getElementById('mic-input').value = String(text).replace('。', '')
         this.hideAnimation.bind(this)()
       },
-      onerror: (err) => {
-        console.log(err)
+      onerror: (errMsg) => {
+        // console.log(err)
         this.hideAnimation.bind(this)()
+        this.displayError.bind(this)(errMsg)
       }
     })
   }
@@ -63,6 +64,10 @@ export default class MicInput extends HTMLElement {
   }
 
   speech () {
+    const element = this.shadowRoot.getElementById('error-message')
+    if (element) {
+      element.parentElement.removeChild(element)
+    }
     this.recognizer.speech()
   }
 
@@ -84,6 +89,20 @@ export default class MicInput extends HTMLElement {
     if (element) {
       element.parentElement.removeChild(element)
     }
+  }
+
+  displayError (errMsg) {
+    const element = document.createElement('div')
+    element.id = 'error-message'
+    element.classList.add('fade-out')
+    const spanElement = document.createElement('span')
+    spanElement.append(document.createTextNode(errMsg))
+    element.appendChild(spanElement)
+    this.shadowRoot.querySelector('.wrap').appendChild(element)
+
+    element.addEventListener('animationend', () => {
+      element.parentElement.removeChild(element)
+    })
   }
 
   disconnectedCallback () {
