@@ -24,11 +24,26 @@ export default class MicInput extends HTMLElement {
 
     this.realInput = null
     this.value_ = '0'
+  }
+
+  connectedCallback () {
+    const _self = this
+
+    this.realInput = document.createElement('input')
+    this.realInput.type = 'hidden'
+    const inputName = this.attributes.name?.value
+    if (inputName !== undefined) {
+      this.realInput.name = inputName
+    }
+    this.realInput.value = this.value_
+    this.appendChild(this.realInput)
+
     this.recognizer = new Recognizer({
       onstart: () => { this.showAnimation.bind(this)() },
       onstop: () => { this.hideAnimation.bind(this)() },
       onresult: (text) => {
         this.shadowRoot.getElementById('mic-input').value = String(text).replace('。', '')
+        this.valueChange()
         this.hideAnimation.bind(this)()
       },
       onerror: (errMsg) => {
@@ -37,16 +52,6 @@ export default class MicInput extends HTMLElement {
         this.displayError.bind(this)(errMsg)
       }
     })
-  }
-
-  connectedCallback () {
-    const _self = this
-
-    this.realInput = document.createElement('input')
-    this.realInput.type = 'hidden'
-    this.realInput.name = this.attributes.name?.value
-    this.realInput.value = this.value_
-    this.appendChild(this.realInput)
 
     // Style
     const styleElement = document.createElement('style')
@@ -61,6 +66,7 @@ export default class MicInput extends HTMLElement {
     this.valueChange = this.valueChange.bind(this)
     this.speech = this.speech.bind(this)
     this.shadowRoot.getElementById('mic-icon').addEventListener('click', this.speech)
+    this.shadowRoot.getElementById('mic-input').addEventListener('change', this.valueChange)
   }
 
   speech () {
@@ -109,10 +115,10 @@ export default class MicInput extends HTMLElement {
   }
 
   valueChange () {
-    // this.value_ = this.shadowRoot.querySelector('input[type=radio][name="starRate"]:checked').value
-    // if (this.realInput) {
-    //   this.realInput.value = this.value_
-    // }
+    this.value_ = this.shadowRoot.getElementById('mic-input').value
+    if (this.realInput) {
+      this.realInput.value = this.value_
+    }
   }
 
   template () {
