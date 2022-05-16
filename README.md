@@ -41,8 +41,12 @@ class customizedMicInput extends MicInput {
 
 ### Options
 
+- [name (optional)](#name-optional)
 - [height (optional)](#height-optional)
 
+#### name (optional)
+
+The name of input, it would be the POST parameter name.
 
 #### height (optional)
 

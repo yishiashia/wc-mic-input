@@ -1,6 +1,6 @@
 {
   "name": "wc-mic-input",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Speech input WebComponent implemented with Web Speech API.",
   "main": "index.js",
   "scripts": {
