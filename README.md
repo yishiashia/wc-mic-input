@@ -24,7 +24,7 @@ Speech recognition input web component.
 ```
 
 ## Demo page
-The demo page: https://yishiashia.github.io/mic-input.html
+The demo page: https://yishiashia.github.io/wc-mic-input/
 ## Usage
 
 If you want to customize this web component, you can import the library and 
